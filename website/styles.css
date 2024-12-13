@@ -1,0 +1,91 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    color: #fff;
+    background: url('background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    text-align: center;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 100px 20px;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    margin: 0;
+    font-family: 'Ample Display', sans-serif;
+}
+
+.hero-content p {
+    font-size: 1.5rem;
+    margin: 20px 0;
+}
+
+.hero-buttons .btn {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 1.2rem;
+    background: #1f8feb;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.hero-buttons .btn:hover {
+    background: #0d6da8;
+}
+
+/* Sections */
+section {
+    padding: 50px 20px;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Projects */
+.projects-gallery {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.project-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center;
+    padding: 20px;
+    transition: transform 0.3s;
+}
+
+.project-card img {
+    max-width: 100%;
+    height: auto;
+}
+
+.project-card:hover {
+    transform: scale(1.05);
+}
+
+/* Contact Footer */
+footer.contact {
+    text-align: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+/* Import Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Ample+Display&display=swap');
