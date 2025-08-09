@@ -1,0 +1,3 @@
+# Create placeholder launcher icons - in a real app these would be proper icon files
+# For now, we'll just create empty files to satisfy the manifest references
+# In practice, you would use Android Asset Studio or design tools to create proper icons
