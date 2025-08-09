@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    
+    <!-- Material 3 Theme Colors -->
+    <color name="md_theme_primary">#1976D2</color>
+    <color name="md_theme_on_primary">#FFFFFF</color>
+    <color name="md_theme_secondary">#03DAC6</color>
+    <color name="md_theme_on_secondary">#000000</color>
+    <color name="md_theme_error">#F44336</color>
+    <color name="md_theme_on_error">#FFFFFF</color>
+    <color name="md_theme_background">#FAFAFA</color>
+    <color name="md_theme_on_background">#000000</color>
+    <color name="md_theme_surface">#FFFFFF</color>
+    <color name="md_theme_on_surface">#000000</color>
+    
+    <!-- Status Colors -->
+    <color name="status_connected">#4CAF50</color>
+    <color name="status_disconnected">#F44336</color>
+    <color name="status_connecting">#FF9800</color>
+    <color name="status_armed">#F44336</color>
+    <color name="status_disarmed">#4CAF50</color>
+    
+    <!-- Battery Colors -->
+    <color name="battery_good">#4CAF50</color>
+    <color name="battery_warning">#FF9800</color>
+    <color name="battery_critical">#F44336</color>
+    
+    <!-- GPS Colors -->
+    <color name="gps_good">#4CAF50</color>
+    <color name="gps_warning">#FF9800</color>
+    <color name="gps_no_fix">#F44336</color>
+</resources>
