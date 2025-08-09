@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pixhawk GCS Lite</string>
+    
+    <!-- Navigation -->
+    <string name="nav_connect">Connect</string>
+    <string name="nav_fly">Fly</string>
+    <string name="nav_missions">Missions</string>
+    <string name="nav_params">Params</string>
+    <string name="nav_logs">Logs</string>
+    <string name="nav_settings">Settings</string>
+    
+    <!-- Connection -->
+    <string name="connection_status_disconnected">Disconnected</string>
+    <string name="connection_status_connecting">Connecting</string>
+    <string name="connection_status_connected">Connected</string>
+    <string name="connection_status_error">Error</string>
+    
+    <!-- Actions -->
+    <string name="action_arm">ARM</string>
+    <string name="action_disarm">DISARM</string>
+    <string name="action_takeoff">Takeoff</string>
+    <string name="action_rtl">RTL</string>
+    <string name="action_land">Land</string>
+    
+    <!-- Connection types -->
+    <string name="connection_type_udp">UDP</string>
+    <string name="connection_type_tcp">TCP</string>
+    <string name="connection_type_bluetooth">Bluetooth</string>
+    
+    <!-- Permissions -->
+    <string name="permission_location_rationale">Location permission is needed for map functionality and Bluetooth device scanning.</string>
+    <string name="permission_bluetooth_rationale">Bluetooth permission is needed to connect to telemetry radios.</string>
+    
+    <!-- General -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="retry">Retry</string>
+    <string name="settings">Settings</string>
+</resources>
