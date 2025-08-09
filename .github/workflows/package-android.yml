@@ -1,0 +1,51 @@
+name: Package Android Project
+
+on:
+  push:
+    paths:
+      - 'android/pixhawk-gcs-lite/**'
+    branches: [ main, develop ]
+  pull_request:
+    paths:
+      - 'android/pixhawk-gcs-lite/**'
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  package-android:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Create Android project ZIP
+      run: |
+        cd android
+        zip -r pixhawk-gcs-lite-${{ github.sha }}.zip pixhawk-gcs-lite/ \
+          -x "pixhawk-gcs-lite/.gradle/*" \
+             "pixhawk-gcs-lite/build/*" \
+             "pixhawk-gcs-lite/app/build/*" \
+             "pixhawk-gcs-lite/local.properties"
+    
+    - name: Upload Android project artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: pixhawk-gcs-lite-${{ github.sha }}
+        path: android/pixhawk-gcs-lite-${{ github.sha }}.zip
+        retention-days: 30
+        
+    - name: Update repository ZIP (on main branch)
+      if: github.ref == 'refs/heads/main'
+      run: |
+        cd android
+        cp pixhawk-gcs-lite-${{ github.sha }}.zip pixhawk-gcs-lite.zip
+        
+    - name: Commit updated ZIP (on main branch)
+      if: github.ref == 'refs/heads/main'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add android/pixhawk-gcs-lite.zip
+        git diff --staged --quiet || git commit -m "Update Android project ZIP [skip ci]"
+        git push
