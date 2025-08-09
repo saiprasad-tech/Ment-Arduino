@@ -7,14 +7,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pixhawk.gcslite.R
+import com.pixhawk.gcslite.data.ConnectionState
+import com.pixhawk.gcslite.viewmodel.ConnectViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConnectScreen() {
-    var host by remember { mutableStateOf("127.0.0.1") }
-    var port by remember { mutableStateOf("14550") }
-    var connectionStatus by remember { mutableStateOf("Disconnected") }
+fun ConnectScreen(
+    viewModel: ConnectViewModel = viewModel()
+) {
+    val host by viewModel.host.collectAsState()
+    val port by viewModel.port.collectAsState()
+    val connectionState by viewModel.connectionState.collectAsState()
+    
+    val connectionStatusText = when (connectionState) {
+        ConnectionState.DISCONNECTED -> stringResource(R.string.connection_status_disconnected)
+        ConnectionState.CONNECTING -> stringResource(R.string.connection_status_connecting)
+        ConnectionState.CONNECTED -> stringResource(R.string.connection_status_connected)
+        ConnectionState.ERROR -> stringResource(R.string.connection_status_error)
+    }
     
     Column(
         modifier = Modifier
@@ -40,7 +52,7 @@ fun ConnectScreen() {
                 
                 OutlinedTextField(
                     value = host,
-                    onValueChange = { host = it },
+                    onValueChange = { viewModel.updateHost(it) },
                     label = { Text(stringResource(R.string.settings_connection_host)) },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -49,7 +61,7 @@ fun ConnectScreen() {
                 
                 OutlinedTextField(
                     value = port,
-                    onValueChange = { port = it },
+                    onValueChange = { viewModel.updatePort(it) },
                     label = { Text(stringResource(R.string.settings_connection_port)) },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -58,13 +70,13 @@ fun ConnectScreen() {
                 
                 // Connection status
                 Text(
-                    text = "Status: $connectionStatus",
+                    text = "Status: $connectionStatusText",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = when (connectionStatus) {
-                        "Connected" -> MaterialTheme.colorScheme.primary
-                        "Connecting" -> MaterialTheme.colorScheme.secondary
-                        "Error" -> MaterialTheme.colorScheme.error
-                        else -> MaterialTheme.colorScheme.onSurface
+                    color = when (connectionState) {
+                        ConnectionState.CONNECTED -> MaterialTheme.colorScheme.primary
+                        ConnectionState.CONNECTING -> MaterialTheme.colorScheme.secondary
+                        ConnectionState.ERROR -> MaterialTheme.colorScheme.error
+                        ConnectionState.DISCONNECTED -> MaterialTheme.colorScheme.onSurface
                     }
                 )
                 
@@ -72,23 +84,16 @@ fun ConnectScreen() {
                 
                 Button(
                     onClick = {
-                        connectionStatus = when (connectionStatus) {
-                            "Disconnected", "Error" -> {
-                                "Connecting"
-                                // TODO: Implement actual connection logic
-                            }
-                            "Connecting", "Connected" -> {
-                                "Disconnected"
-                                // TODO: Implement disconnection logic
-                            }
-                            else -> connectionStatus
+                        when (connectionState) {
+                            ConnectionState.DISCONNECTED, ConnectionState.ERROR -> viewModel.connect()
+                            ConnectionState.CONNECTING, ConnectionState.CONNECTED -> viewModel.disconnect()
                         }
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = when (connectionStatus) {
-                            "Disconnected", "Error" -> stringResource(R.string.action_connect)
+                        text = when (connectionState) {
+                            ConnectionState.DISCONNECTED, ConnectionState.ERROR -> stringResource(R.string.action_connect)
                             else -> stringResource(R.string.action_disconnect)
                         }
                     )

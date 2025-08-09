@@ -10,44 +10,46 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pixhawk.gcslite.R
+import com.pixhawk.gcslite.data.ConnectionState
+import com.pixhawk.gcslite.viewmodel.FlyViewModel
+import com.pixhawk.gcslite.ui.components.VehicleMapView
 
 @Composable
-fun FlyScreen() {
+fun FlyScreen(
+    viewModel: FlyViewModel = viewModel()
+) {
+    val vehicleState by viewModel.vehicleState.collectAsState()
+    val connectionState by viewModel.connectionState.collectAsState()
+    
+    // Collect action results for user feedback
+    LaunchedEffect(Unit) {
+        viewModel.actionResult.collect { result ->
+            // In a real app, you'd show a snackbar here
+            println("Action result: $result")
+        }
+    }
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         // HUD Section
         HudOverlay(
+            vehicleState = vehicleState,
+            connectionState = connectionState,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(120.dp)
         )
         
-        // Map placeholder (would contain Google Maps)
-        Box(
+        // Map section
+        VehicleMapView(
+            vehicleState = vehicleState,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Card(
-                modifier = Modifier.fillMaxSize(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Map View\n(Google Maps integration)\n\nAdd MAPS_API_KEY to enable",
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
-                    )
-                }
-            }
-        }
+                .padding(16.dp)
+        )
         
         // Action buttons
         LazyRow(
@@ -58,21 +60,27 @@ fun FlyScreen() {
         ) {
             item {
                 Button(
-                    onClick = { /* TODO: Implement arm/disarm */ }
+                    onClick = { 
+                        if (vehicleState.armed) {
+                            viewModel.disarmVehicle()
+                        } else {
+                            viewModel.armVehicle()
+                        }
+                    }
                 ) {
-                    Text(stringResource(R.string.action_arm))
+                    Text(if (vehicleState.armed) stringResource(R.string.action_disarm) else stringResource(R.string.action_arm))
                 }
             }
             item {
                 OutlinedButton(
-                    onClick = { /* TODO: Implement RTL */ }
+                    onClick = { viewModel.returnToLaunch() }
                 ) {
                     Text(stringResource(R.string.action_rtl))
                 }
             }
             item {
                 OutlinedButton(
-                    onClick = { /* TODO: Implement takeoff */ }
+                    onClick = { viewModel.takeoff() }
                 ) {
                     Text(stringResource(R.string.action_takeoff))
                 }
@@ -82,7 +90,11 @@ fun FlyScreen() {
 }
 
 @Composable
-private fun HudOverlay(modifier: Modifier = Modifier) {
+private fun HudOverlay(
+    vehicleState: com.pixhawk.gcslite.data.VehicleState,
+    connectionState: ConnectionState,
+    modifier: Modifier = Modifier
+) {
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -96,9 +108,13 @@ private fun HudOverlay(modifier: Modifier = Modifier) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    HudItem("Mode", "STABILIZE")
-                    HudItem("Armed", "DISARMED", isWarning = true)
-                    HudItem("Link", "100%")
+                    HudItem("Mode", vehicleState.mode)
+                    HudItem(
+                        "Armed", 
+                        if (vehicleState.armed) "ARMED" else "DISARMED", 
+                        isWarning = !vehicleState.armed
+                    )
+                    HudItem("Link", if (connectionState == ConnectionState.CONNECTED) "100%" else "0%")
                 }
             }
             item {
@@ -106,9 +122,9 @@ private fun HudOverlay(modifier: Modifier = Modifier) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    HudItem("Sats", "12")
-                    HudItem("Battery", "85%")
-                    HudItem("GS", "0.0 m/s")
+                    HudItem("Sats", "${vehicleState.satellites}")
+                    HudItem("Battery", "${vehicleState.batteryPercent}%")
+                    HudItem("GS", "%.1f m/s".format(vehicleState.groundSpeed))
                 }
             }
             item {
@@ -116,9 +132,9 @@ private fun HudOverlay(modifier: Modifier = Modifier) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    HudItem("Alt", "0.0 m")
-                    HudItem("Yaw", "0°")
-                    HudItem("Pitch", "0°")
+                    HudItem("Alt", "%.1f m".format(vehicleState.altitude))
+                    HudItem("Yaw", "%.0f°".format(vehicleState.yaw))
+                    HudItem("Pitch", "%.0f°".format(vehicleState.pitch))
                 }
             }
         }
