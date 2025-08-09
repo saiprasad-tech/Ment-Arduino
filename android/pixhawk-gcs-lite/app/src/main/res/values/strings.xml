@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Pixhawk GCS Lite</string>
+    
+    <!-- Navigation -->
+    <string name="nav_connect">Connect</string>
+    <string name="nav_fly">Fly</string>
+    <string name="nav_missions">Missions</string>
+    <string name="nav_params">Params</string>
+    <string name="nav_logs">Logs</string>
+    <string name="nav_settings">Settings</string>
+    
+    <!-- Connection -->
+    <string name="connection_status_disconnected">Disconnected</string>
+    <string name="connection_status_connecting">Connecting</string>
+    <string name="connection_status_connected">Connected</string>
+    <string name="connection_status_error">Error</string>
+    
+    <!-- Actions -->
+    <string name="action_arm">Arm</string>
+    <string name="action_disarm">Disarm</string>
+    <string name="action_rtl">RTL</string>
+    <string name="action_takeoff">Takeoff</string>
+    <string name="action_connect">Connect</string>
+    <string name="action_disconnect">Disconnect</string>
+    
+    <!-- HUD -->
+    <string name="hud_armed">Armed</string>
+    <string name="hud_disarmed">Disarmed</string>
+    <string name="hud_satellites">Sats: %d</string>
+    <string name="hud_battery">Battery: %d%%</string>
+    <string name="hud_groundspeed">GS: %.1f m/s</string>
+    <string name="hud_altitude">Alt: %.1f m</string>
+    
+    <!-- Settings -->
+    <string name="settings_connection_host">Host</string>
+    <string name="settings_connection_port">Port</string>
+    <string name="settings_default_host">127.0.0.1</string>
+    <string name="settings_default_port">14550</string>
+</resources>
